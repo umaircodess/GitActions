@@ -1,9 +1,11 @@
 name: Deploy to another org
+
 on:
-  pull_request
+  pull_request:
+   branches: [main]
 
 jobs:
-  deploy:
+  deploy_to_staging:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -20,8 +22,7 @@ jobs:
     - name: "Populate auth file with SFDX_URL secret of integration org"
       shell: bash
       run: |
-        echo ${{ secrets.URL}} > ./SFDX_AUTH_URL.txt
-          
+        echo ${{ secrets.URL}} > ./SFDX_AUTH_URL.txt          
     - name: 'Authenticate to Org'
       run: sfdx auth:sfdxurl:store -f ./SFDX_AUTH_URL.txt -s -a integration
     - name: 'Deploy to Staging'
