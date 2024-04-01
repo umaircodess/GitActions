@@ -1,0 +1,34 @@
+name: Main1
+on:
+  pull_request:
+    branches: [main]
+    
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  deploy_to_staging:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4.1.2
+      with:
+          fetch-depth: 0
+    - name: prepare_deploy_data to staging
+      shell: bash
+      run: |
+        echo ${{ secrets.SFDC_SUREBIRD_STAG_AUTH_URL }} > ./SFDC_SUREBIRD_STAG_AUTH_URL.txt
+        echo "files=$(git --no-pager diff --name-only --diff-filter=d origin/${{ github.base_ref }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" > ./files.txt
+        cat files.txt
+    # - name: authenticate_to_staging
+    #   # original repo forcedotcom/salesforcedx-actions@master
+    #   uses: marcelblijleven/salesforcedx-actions@master
+    #   with:
+    #     args: force:auth:sfdxurl:store --sfdx-url-file=./SFDC_SUREBIRD_STAG_AUTH_URL.txt --alias=staging
+    # - name: deploy_files to staging
+    #   # original repo forcedotcom/salesforcedx-actions@master
+    #   uses: marcelblijleven/salesforcedx-actions@master
+    #   with:
+    #     args: 'force:source:deploy -c -p ''"${{ env.files_to_deploy }}"'' -u ${{ secrets.SFDC_SUREBIRD_STAG_USERNAME }} -l RunLocalTests'
+    # - run: $([ $? -eq 0 ]  || exit 1)
