@@ -40,6 +40,11 @@ jobs:
 
     - name: 'Deploy to Staging'
       run: sfdx force:source:deploy -c -p "${{ env.notdeletedfiles}}" 
-      
+
+    - name: Checkout main code
+      uses: actions/checkout@v4.1.2
+      with:
+          ref: main
+          
     - name: 'Deploy deleted files to Staging'
       run: sf project delete source -c --source-dir "${{ env.deletedfiles}}" 
