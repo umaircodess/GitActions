@@ -14,15 +14,15 @@ jobs:
       with:
           fetch-depth: 0
                 # Install Node
-    - name: Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: 'latest'
-        check-latest: true
-      # Install Salesforce CLI
-    - name: Install Salesforce CLI
-      run: |
-       sudo npm install @salesforce/cli --global
+    # - name: Node
+    #   uses: actions/setup-node@v4
+    #   with:
+    #     node-version: 'latest'
+    #     check-latest: true
+    #   # Install Salesforce CLI
+    # - name: Install Salesforce CLI
+    #   run: |
+    #    sudo npm install @salesforce/cli --global
 
     - name: Extract files to deploy to staging
       shell: bash
