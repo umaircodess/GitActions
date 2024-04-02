@@ -1,4 +1,4 @@
-name: Deploy to another org
+name: Staging
 
 on:
   workflow_dispatch:
@@ -26,20 +26,21 @@ jobs:
 
     - name: Extract files to deploy to staging
       run: |
-        echo "notdeletedfiles=$(git --no-pager diff --name-only --diff-filter=d origin/${{ github.base_ref }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" > ./files.txt
-        echo "deletedfiles=$(git --no-pager diff --name-only --diff-filter=acmr origin/${{ github.base_ref }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" > ./files.txt
+        echo "notdeletedfiles=$(git --no-pager diff --name-only --diff-filter=d origin/${{ github.base_ref }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
+        echo "deletedfiles=$(git --no-pager diff --name-only --diff-filter=acmr origin/${{ github.base_ref }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
 
     - name: "Populate auth file with SFDX_URL secret of integration org"
       shell: bash
       run: |
-        echo ${{ secrets.URL}} > ./SFDX_AUTH_URL.txt          
+        echo ${{ secrets.URL}} > ./SFDX_AUTH_URL.txt    
+              
     - name: 'Authenticate to Org'
       run: sfdx auth:sfdxurl:store -f ./SFDX_AUTH_URL.txt -s -a integration
 
       if: ${{ env.notdeletedfiles != '' }}
     - name: 'Deploy to Staging'
-      run: sfdx force:source:deploy -c -p "${{ env.notdeletedfiles}}" -l RunLocalTests
+      run: sfdx force:source:deploy -c -p "${{ env.notdeletedfiles}}" -l RunLocalTests -o integration
 
       if: ${{ env.deletedfiles != '' }}
     - name: 'Deploy deleted files to Staging'
-      run: sfdx force:source:delete -c -p "${{ env.deletedfiles}}"
+      run: sfdx force:source:delete -c -p "${{ env.deletedfiles}}" -o integration
