@@ -38,7 +38,7 @@ jobs:
       run: sfdx auth:sfdxurl:store -f ./SFDX_AUTH_URL.txt -s -a integration
 
     - name: 'Deploy to Staging'
-      run: sfdx force:source:deploy -c -p "${{ env.notdeletedfiles}}" -l RunLocalTests -o integration
-
+      run: sfdx force:source:deploy -c -p "${{ env.notdeletedfiles}}" 
+      
     - name: 'Deploy deleted files to Staging'
-      run: sfdx force:source:delete -c -p "${{ env.deletedfiles}}" -o integration
+      run: sfdx force:source:delete -c -p "${{ env.deletedfiles}}" -
