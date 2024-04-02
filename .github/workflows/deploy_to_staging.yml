@@ -13,6 +13,7 @@ jobs:
       uses: actions/checkout@v4.1.2
       with:
           fetch-depth: 0
+          ref: main
     # Install Node
     - name: Node
       uses: actions/setup-node@v4
