@@ -25,7 +25,6 @@ jobs:
     #    sudo npm install @salesforce/cli --global
 
     - name: Extract files to deploy to staging
-      shell: bash
       run:
         # echo "notdeletedfiles=$(git diff --name-only --diff-filter=d origin/staging -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
         echo "files_to_deploy=$(git --no-pager diff --name-only --diff-filter=d origin/staging -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
