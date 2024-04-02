@@ -28,7 +28,7 @@ jobs:
       shell: bash
       run: |
         echo "notdeletedfiles=$(git diff --name-only --diff-filter=d origin/staging -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
-        echo "deletedfiles=$(git diff --name-only --diff-filter=acmr origin/staging-- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
+        echo "deletedfiles=$(git diff --name-only --diff-filter=acmr origin/staging -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
 
 
     # - name: "Populate auth file with SFDX_URL secret of integration org"
