@@ -26,6 +26,8 @@ jobs:
 
     - name: Extract files to deploy to staging
       run: |
+        echo ${{ github.event.before }}
+        echo ${{ github.sha }}
         echo "notdeletedfiles=$(git diff --name-only --diff-filter=d ${{ github.event.before }}...${{ github.sha }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
         echo "deletedfiles=$(git diff --name-only --diff-filter=acmr ${{ github.event.before }}...${{ github.sha }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV\
 
