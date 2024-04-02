@@ -41,4 +41,4 @@ jobs:
       run: sfdx force:source:deploy -c -p "${{ env.notdeletedfiles}}" 
       
     - name: 'Deploy deleted files to Staging'
-      run: sfdx force:source:delete -c -p "${{ env.deletedfiles}}" -
+      run: sf project delete source -c --source-dir "${{ env.deletedfiles}}" 
