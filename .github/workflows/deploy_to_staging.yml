@@ -46,4 +46,4 @@ jobs:
           ref: main
 
     - name: 'Deploy deleted files to Staging'
-      run: sf project delete source -c --source-dir "${{ env.deletedfiles}}" 
+      run: sf project delete source -c --source-dir "${{ env.deletedfiles}}" --target-org integration
