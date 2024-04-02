@@ -30,7 +30,7 @@ jobs:
         echo "files_to_deploy=$(git --no-pager diff --name-only --diff-filter=d origin/staging -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
       # echo "deletedfiles=$(git diff --name-only --diff-filter=acmr origin/staging -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV\
 
-      run:
+    - run: |
         echo ${{ env.files_to_deploy}} > ./files.txt
         cat files.txt
 
