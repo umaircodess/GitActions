@@ -26,10 +26,8 @@ jobs:
 
     - name: Extract files to deploy to staging
       run: |
-        echo "notdeletedfiles=$(git --no-pager diff --name-only --diff-filter=d origin/${{ github.base_ref }} \
-        -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /' | sed 's/, $//' | sed 's/,/, /g'" >> $GITHUB_ENV
-        echo "deletedfiles=$(git --no-pager diff --name-only --diff-filter=acmr origin/${{ github.base_ref }} \
-        -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /' | sed 's/, $//' | sed 's/,/, /g'" >> $GITHUB_ENV
+        echo "notdeletedfiles=$(git --no-pager diff --name-only --diff-filter=d origin/${{ github.base_ref }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /' | sed 's/, $//' | sed 's/,/, /g'" >> $GITHUB_ENV
+        echo "deletedfiles=$(git --no-pager diff --name-only --diff-filter=acmr origin/${{ github.base_ref }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /' | sed 's/, $//' | sed 's/,/, /g'" >> $GITHUB_ENV
 
     - name: "Populate auth file with SFDX_URL secret of integration org"
       shell: bash
