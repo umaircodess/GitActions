@@ -25,13 +25,13 @@ jobs:
     #    sudo npm install @salesforce/cli --global
 
     - name: Extract files to deploy to staging
-      run:
-        # echo "notdeletedfiles=$(git diff --name-only --diff-filter=d origin/staging -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
-        echo "files_to_deploy=$(git --no-pager diff --name-only origin/staging -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
-      # echo "deletedfiles=$(git diff --name-only --diff-filter=acmr origin/staging -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV\
+      run: |
+        echo "notdeletedfiles=$(git diff --name-only --diff-filter=d origin/${{ github.base_ref }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
+        echo "deletedfiles=$(git diff --name-only --diff-filter=acmr origin/${{ github.base_ref }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV\
 
     - run: |
-        echo ${{ env.files_to_deploy}} > ./files.txt
+        echo ${{ env.notdeletedfiles}} > ./files.txt
+        echo ${{ env.deletedfiles}} > ./files.txt
         cat files.txt
 
     # - name: "Populate auth file with SFDX_URL secret of integration org"
