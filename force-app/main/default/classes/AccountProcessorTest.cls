@@ -4,8 +4,8 @@ public class AccountProcessorTest {
     static void testCountContacts() {
         // Create test data - Accounts with associated Contacts
         List<Account> testAccounts = new List<Account>{
-            new Account(Name = 'Test Account 2'),
-            new Account(Name = 'Test Account 20')
+            new Account(Name = 'Test Account 1'),
+            new Account(Name = 'Test Account 2')
         };
         List<Database.SaveResult> results = Database.insert (testAccounts, false);
         List<Contact> testContacts = new List<Contact>{

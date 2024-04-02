@@ -3,7 +3,7 @@ public class StringArrayTest {
         List<String> result = new List<String>();
         
         for (Integer i = 0; i < input; i++) {
-            result.add('@ Tests ' + i);
+            result.add('Test ' + i);
         }
         
         return result;
