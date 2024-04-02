@@ -35,11 +35,11 @@ jobs:
         echo ${{ secrets.URL}} > ./SFDX_AUTH_URL.txt          
     - name: 'Authenticate to Org'
       run: sfdx auth:sfdxurl:store -f ./SFDX_AUTH_URL.txt -s -a integration
+
+      if: ${{ env.notdeletedfiles != '' }}
     - name: 'Deploy to Staging'
       run: sfdx force:source:deploy -c -p "${{ env.notdeletedfiles}}" -l RunLocalTests
 
-    - run: $([ $? -eq 0 ]  || exit 1)
-
-      if: ${{ env.MY_ENV_VARIABLE != '' }}
+      if: ${{ env.deletedfiles != '' }}
     - name: 'Deploy deleted files to Staging'
       run: sfdx force:source:delete -c -p "${{ env.deletedfiles}}"
