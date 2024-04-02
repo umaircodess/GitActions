@@ -9,7 +9,7 @@ private class AccountManagerTest {
         
         // Insert test contacts
         List<Contact> testContacts = new List<Contact>{
-            new Contact(AccountId = testAccount.Id, FirstName = 'John', LastName = 'Doe'),
+            new Contact(AccountId = testAccount.Id, FirstName = 'Johny', LastName = 'Doe'),
             new Contact(AccountId = testAccount.Id, FirstName = 'Jane', LastName = 'Doe')
         };
         insert testContacts;
