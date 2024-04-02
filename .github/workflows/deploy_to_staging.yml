@@ -26,16 +26,11 @@ jobs:
 
     - name: Extract files to deploy to staging
       run: |
-        echo ${{ github.event.before }}
-        echo ${{ github.sha }}
-        echo "notdeletedfiles=$(git --no-pager diff --name-only --diff-filter=d ${{ github.event.before }}...${{ github.sha }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
-        echo "deletedfiles=$(git --no-pager diff --name-only --diff-filter=acmr ${{ github.event.before }}...${{ github.sha }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
-        echo "files=$(git --no-pager diff --name-only origin/main -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" > ./files.txt
+        echo "notdeletedfiles=$(git --no-pager diff --name-only --diff-filter=d $(git rev-list --max-parents=0 HEAD)...${{ github.sha }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" > ./files.txt
+        echo "deletedfiles=$(git --no-pager diff --name-only --diff-filter=acmr $(git rev-list --max-parents=0 HEAD)...${{ github.sha }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" > ./files.txt
 
-    - run: |
-        echo ${{ env.notdeletedfiles}} > ./files.txt
-        echo ${{ env.deletedfiles}} > ./files.txt
-        echo ${{ env.files}} > ./files.txt
+
+    - run:
         cat files.txt
 
     # - name: "Populate auth file with SFDX_URL secret of integration org"
