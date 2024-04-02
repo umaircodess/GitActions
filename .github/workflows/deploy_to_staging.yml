@@ -24,6 +24,11 @@ jobs:
       run: |
        sudo npm install @salesforce/cli --global
 
+    - name: Extract files to deploy to staging
+      run: |
+        echo "notdeletedfiles=$(git --no-pager diff --name-only --diff-filter=d origin/${{ github.base_ref }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
+        echo "deletedfiles=$(git --no-pager diff --name-only --diff-filter=acmr origin/${{ github.base_ref }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
+
     - name: "Populate auth file with SFDX_URL secret of integration org"
       shell: bash
       run: |
@@ -32,22 +37,8 @@ jobs:
     - name: 'Authenticate to Org'
       run: sfdx auth:sfdxurl:store -f ./SFDX_AUTH_URL.txt -s -a integration
 
-    - name: Extract files to deploy to staging
-      run: |
-        echo "notdeletedfiles=$(git --no-pager diff --name-only --diff-filter=d origin/${{ github.base_ref }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
-        if [ $? -eq 1 ]; then
-        sfdx force:source:deploy -c -p "${{ env.notdeletedfiles}}" -l RunLocalTests -o integration
-        fi
-        echo "deletedfiles=$(git --no-pager diff --name-only --diff-filter=acmr origin/${{ github.base_ref }} -- force-app | tr '\n' ',' | sed 's/,/, /g' | sed 's/\(.*\),/\1 /')" >> $GITHUB_ENV
-        if [ $? -eq 1 ]; then
-        sfdx force:source:delete -c -p "${{ env.deletedfiles}}" -o integration
-        fi
+    - name: 'Deploy to Staging'
+      run: sfdx force:source:deploy -c -p "${{ env.notdeletedfiles}}" -l RunLocalTests -o integration
 
-
-    #   if: ${{ (isEmpty(env.notdeletedfiles)) }}
-    # - name: 'Deploy to Staging'
-    #   run: sfdx force:source:deploy -c -p "${{ env.notdeletedfiles}}" -l RunLocalTests -o integration
-
-    #   if: ${{ env.deletedfiles != ' ' }}
-    # - name: 'Deploy deleted files to Staging'
-    #   run: sfdx force:source:delete -c -p "${{ env.deletedfiles}}" -o integration
+    - name: 'Deploy deleted files to Staging'
+      run: sfdx force:source:delete -c -p "${{ env.deletedfiles}}" -o integration
