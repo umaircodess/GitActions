@@ -27,7 +27,7 @@ jobs:
 
       - name: 'Installing sfdx git delta'
         run: |
-            force-app/main/default/classes/RUNTEST.cls, force-app/main/default/classes/RUNTEST.cls-meta.xml
+            echo y | sfdx plugins:install sfdx-git-delta
             sfdx plugins        
 
       - name: "Populate auth file with SFDX_URL secret of integration org"
